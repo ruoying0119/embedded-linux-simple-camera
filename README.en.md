@@ -1,36 +1,24 @@
 # 嵌入式Linux简易相机
 
-#### Description
+#### 项目功能
 基于V4L2架构驱动外置USB摄像头实现拍照和查看相册的功能
 
-#### Software Architecture
-Software architecture description
+#### 所需硬件
+韦东山的老师的IMX6ULL的开发板以及外置USB摄像头，当然其它Linux板子理论上也可以。
 
-#### Installation
+#### 涉及技术
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+这个项目主要涉及Linux的V4L2框架的应用，主要是为了获取摄像头的数据，JPEG开源库的应用，为了将获取到的图像数据从JPEG转化为RGB格式在LCD上显示，TSLib库实现触摸屏的触摸操作，多线程操作以及双向链表方式对照片进行存储。
 
-#### Instructions
+#### 注意事项
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+1.  我将整个项目集中在一个文件中，只需编译为可执行文件即可
+2.  需要自己移植JPEG库以及对应板子的交叉编译链
+3.  背景图片我放在文件夹了，对应代码中的background1.jpg和background2.jpg
 
-#### Contribution
+#### 详细文档
 
-1.  Fork the repository
-2.  Create Feat_xxx branch
-3.  Commit your code
-4.  Create Pull Request
+文档主要有三篇，V4L2获取摄像头数据、在LCD显示屏上实时显示摄像头数据、项目涉及技术的详解，文档链接：https://zhuanlan.zhihu.com/p/679857620
+项目最终展示，链接：https://t.bilibili.com/890608455772012608?share_source=pc_native
 
 
-#### Gitee Feature
-
-1.  You can use Readme\_XXX.md to support different languages, such as Readme\_en.md, Readme\_zh.md
-2.  Gitee blog [blog.gitee.com](https://blog.gitee.com)
-3.  Explore open source project [https://gitee.com/explore](https://gitee.com/explore)
-4.  The most valuable open source project [GVP](https://gitee.com/gvp)
-5.  The manual of Gitee [https://gitee.com/help](https://gitee.com/help)
-6.  The most popular members  [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
