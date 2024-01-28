@@ -19,6 +19,7 @@
 #### 详细文档
 
 文档主要有三篇，V4L2获取摄像头数据、在LCD显示屏上实时显示摄像头数据、项目涉及技术的详解，文档链接：https://zhuanlan.zhihu.com/p/679857620
+
 项目最终展示，链接：https://t.bilibili.com/890608455772012608?share_source=pc_native
 
 
