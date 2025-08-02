@@ -1,0 +1,62 @@
+# 构建目录
+build/
+lib/
+
+# 编译生成的文件
+*.o
+*.a
+*.so
+*.exe
+embedded-camera
+
+# IDE和编辑器文件
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 系统文件
+.DS_Store
+Thumbs.db
+*.tmp
+
+# 第三方库解压目录（保留压缩包）
+thirdlibs/jpeg-9b/
+thirdlibs/tslib*/
+
+# 日志文件
+*.log
+
+# 临时文件和备份文件
+*-new.*
+*-old.*
+*_backup.*
+*.bak
+temp_*
+
+# 不需要的文件和目录
+clean_files.sh
+background/
+
+# 重复的背景图片目录（使用assets/）
+background/
+
+# CMake生成文件
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+install_manifest.txt
+
+# 照片文件（如果在项目目录下）
+*.jpg
+*.jpeg
+*.png
+!assets/background*.jpg
+!assets/background*.png
+
+# 压缩包（可选，如果不想提交大文件）
+# thirdlibs/*.tar.gz
+# thirdlibs/*.tar.bz2
+# thirdlibs/*.tar.xz
