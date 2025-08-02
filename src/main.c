@@ -5,16 +5,26 @@
 #include "jpeg_handler.h"
 #include "gallery.h"
 #include <signal.h>
-#include <time.h>
 
 // 全局变量
 static int app_running = 1;
 static pthread_t touch_thread;
+static int signal_count = 0;  // 信号计数
 
 // 信号处理函数
 void signal_handler(int sig) {
-    printf("\n收到信号 %d，退出程序...\n", sig);
-    app_running = 0;
+    signal_count++;
+    printf("\n收到信号 %d，退出程序... (第%d次)\n", sig, signal_count);
+    
+    if (signal_count == 1) {
+        // 第一次信号：正常退出
+        app_running = 0;
+        g_touch_thread_running = 0;
+    } else if (signal_count >= 2) {
+        // 第二次信号：强制退出
+        printf("强制退出程序\n");
+        exit(1);
+    }
 }
 
 // 函数声明
@@ -26,7 +36,7 @@ static void main_loop(void);
 
 int main(void) {
     printf("嵌入式Linux简易相机启动...\n");
-    printf("按 Ctrl+C 退出程序\n");
+    printf("按 Ctrl+C 退出程序（连按两次强制退出）\n");
     
     // 注册信号处理函数
     signal(SIGINT, signal_handler);
@@ -93,6 +103,7 @@ static int initialize_system(void) {
     }
     
     // 初始化相册
+    printf("初始化相册目录: %s\n", DEFAULT_PHOTO_DIR);
     if (gallery_init(&g_gallery, DEFAULT_PHOTO_DIR) != SUCCESS) {
         printf("相册初始化失败\n");
         v4l2_camera_cleanup(&g_camera);
@@ -102,13 +113,7 @@ static int initialize_system(void) {
     }
     
     // 加载现有图片
-    if (gallery_load_images(&g_gallery) != SUCCESS) {
-        printf("相册初始化失败\n");
-        v4l2_camera_cleanup(&g_camera);
-        touchscreen_cleanup(&g_touchscreen);
-        lcd_cleanup(&g_lcd);
-        return ERROR;
-    }
+    int max_index = gallery_load_images(&g_gallery);
     
     // 启动触摸屏线程
     g_touch_thread_running = 1;
@@ -125,37 +130,36 @@ static int initialize_system(void) {
 }
 
 static void cleanup_system(void) {
+    printf("开始清理系统资源...\n");
+    
     // 停止触摸屏线程
     g_touch_thread_running = 0;
+    
     if (touch_thread) {
+        printf("等待触摸屏线程退出...\n");
+        
+        // 等待线程退出，如果阻塞则由信号处理函数强制退出
         pthread_join(touch_thread, NULL);
+        printf("触摸屏线程已退出\n");
     }
     
     // 清理各模块
+    printf("清理模块资源...\n");
     gallery_cleanup(&g_gallery);
     v4l2_camera_cleanup(&g_camera);
     touchscreen_cleanup(&g_touchscreen);
     lcd_cleanup(&g_lcd);
+    
+    printf("系统资源清理完成\n");
 }
 
 static int take_photo(void) {
+    static int photo_index = 0;
     char filename[MAX_PATH_LEN];
     
-    // 获取当前时间
-    time_t rawtime;
-    struct tm *timeinfo;
-    time(&rawtime);
-    timeinfo = localtime(&rawtime);
-    
-    // 生成基于时间的文件名：YYYYMMDD_HHMMSS.jpg
-    snprintf(filename, sizeof(filename), "%s/%04d%02d%02d_%02d%02d%02d.jpg", 
-             DEFAULT_PHOTO_DIR,
-             timeinfo->tm_year + 1900,  // 年份
-             timeinfo->tm_mon + 1,      // 月份 (0-11，所以+1)
-             timeinfo->tm_mday,         // 日期
-             timeinfo->tm_hour,         // 小时
-             timeinfo->tm_min,          // 分钟
-             timeinfo->tm_sec);         // 秒钟
+    // 生成文件名
+    photo_index = gallery_get_next_image_index(&g_gallery);
+    snprintf(filename, sizeof(filename), "%s/%d.jpg", DEFAULT_PHOTO_DIR, photo_index);
     
     // 获取一帧图像
     unsigned char *frame_data;

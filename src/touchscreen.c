@@ -92,6 +92,11 @@ void* touchscreen_thread(void *arg) {
     int x, y;
     
     while (g_touch_thread_running) {
+        // 检查是否需要退出
+        if (!g_touch_thread_running) {
+            break;
+        }
+        
         int result = touchscreen_read(ts, &x, &y);
         if (result == SUCCESS) {
             // 只在有有效触摸时处理事件
@@ -101,8 +106,14 @@ void* touchscreen_thread(void *arg) {
             }
         }
         
+        // 检查是否需要退出
+        if (!g_touch_thread_running) {
+            break;
+        }
+        
         usleep(50000);  // 50ms延时
     }
     
+    printf("触摸屏线程正常退出\n");
     return NULL;
 }

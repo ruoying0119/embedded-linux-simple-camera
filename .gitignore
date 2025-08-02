@@ -35,12 +35,6 @@ thirdlibs/tslib*/
 *.bak
 temp_*
 
-# 不需要的文件和目录
-clean_files.sh
-background/
-
-# 重复的背景图片目录（使用assets/）
-background/
 
 # CMake生成文件
 CMakeCache.txt
@@ -49,14 +43,4 @@ cmake_install.cmake
 Makefile
 install_manifest.txt
 
-# 照片文件（如果在项目目录下）
-*.jpg
-*.jpeg
-*.png
-!assets/background*.jpg
-!assets/background*.png
 
-# 压缩包（可选，如果不想提交大文件）
-# thirdlibs/*.tar.gz
-# thirdlibs/*.tar.bz2
-# thirdlibs/*.tar.xz
