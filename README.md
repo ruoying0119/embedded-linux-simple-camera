@@ -24,7 +24,7 @@ ARM平台的简易相机项目，演示静态链接和模块化构建。
 ├── src/                # 源代码模块
 ├── include/           # 头文件
 ├── thirdlibs/         # 第三方库源码包
-├── assets/            # 背景图片等资源
+├── background/         # 背景图片等资源
 ├── CMakeLists.txt     # 主构建配置
 ├── src/CMakeLists.txt # 模块构建配置
 └── build.sh          # 自动构建脚本
@@ -65,7 +65,7 @@ set(CMAKE_C_COMPILER "${TOOLCHAIN_PATH}/arm-buildroot-linux-gnueabihf-gcc")
 ```c
 #define CAMERA_WIDTH 800           // 摄像头分辨率
 #define CAMERA_HEIGHT 600
-#define DEFAULT_PHOTO_DIR "/tmp/"  // 照片存储目录
+#define DEFAULT_PHOTO_DIR "/home/"  // 照片存储目录
 #define BUFFER_COUNT 4             // V4L2缓冲区数量
 ```
 
@@ -247,6 +247,10 @@ ls /dev/video* /dev/fb* /dev/input/*
 - **模块化设计**：便于学习和二次开发
 
 本项目适合嵌入式Linux开发学习和简单相机应用开发。
+
+## 拓展思路
+1. **添加lvgl**：添加LVGL图形库，实现GUI界面
+2. **yuv源数据添加h264编解码**：添加h264编解码
 
 ## 开源协议
 
